@@ -69,7 +69,7 @@ class FiveOneJobSpider(Spider):
             soup = Bs(html, 'lxml')
             item = FiveOneJobItem()
             salary = selector.xpath('string(//div[@class="cn"]/strong)')
-            location = selector.xpath('string(//div[@class="bmsg inbox"]/p)').replace('上班地址：', '')
+            location = re.sub('\s+', '', selector.xpath('string(//div[@class="bmsg inbox"]/p)').replace('上班地址：', ''))
             work_experience = selector.xpath('string(//div[@class="t1"]/span[1])')
             date_id = len(soup.select('div[class="t1"] span[class="sp4"]'))
             people_count = selector.xpath(
@@ -156,11 +156,11 @@ class FiveOneJobSpider(Spider):
             html = response.body.decode('gbk', 'ignore')
             selector = etree.HTML(html)
             item = response.meta['item']
-            business_type = selector.xpath('string(//p[@class="ltype"])').split('|')[0]
-            business_count = selector.xpath('string(//p[@class="ltype"])').split('|')[1]
-            business_industry = selector.xpath('string(//p[@class="ltype"])').split('|')[2]
-            business_location = selector.xpath('string(//div[@class="inbox"]/p)').replace('公司地址：', '')
-            business_info = selector.xpath('string(//div[@class="con_msg"]/div[1]/p)')
+            business_type = selector.xpath('string(//p[@class="ltype"])').split('|')[0].strip()
+            business_count = selector.xpath('string(//p[@class="ltype"])').split('|')[1].strip()
+            business_industry = selector.xpath('string(//p[@class="ltype"])').split('|')[2].strip()
+            business_location = selector.xpath('string(//div[@class="inbox"]/p)').replace('公司地址：', '').strip()
+            business_info = selector.xpath('string(//div[@class="con_msg"]/div[1]/p)').strip()
             item['business_type'] = business_type
             item['business_count'] = business_count
             item['business_industry'] = business_industry
@@ -173,15 +173,19 @@ class FiveOneJobSpider(Spider):
             item = response.meta['item']
             selector = etree.HTML(html)
             business_all_info = re.sub('\s+', '', selector.xpath('string(//div[@class="tmsg inbox"])'))
-            business_type = selector.xpath('string(//p[@class="msg ltype"])').split('|')[0]
-            business_count = selector.xpath('string(//p[@class="msg ltype"])').split('|')[1]
-            business_industry = selector.xpath('string(//p[@class="msg ltype"])').split('|')[2]
+            business_type = re.sub('\s+', '', selector.xpath(
+                'string(//p[@class="msg ltype"])').split('|')[0]).strip()
+            business_count = re.sub('\s+', '', selector.xpath(
+                'string(//p[@class="msg ltype"])').split('|')[1]).strip()
+            business_industry = re.sub('\s+', '', selector.xpath(
+                'string(//p[@class="msg ltype"])').split('|')[2]).strip()
             item['business_type'] = business_type
             item['business_count'] = business_count
             item['business_industry'] = business_industry
             if re.findall('工作地址:(.*?)', business_all_info):
                 try:
-                    item['business_location'] = re.findall('工作地址:(.*?)', business_all_info)[0]
+                    item['business_location'] = re.sub('\s+', '', re.findall(
+                        '工作地址:(.*?)', business_all_info)[0]).strip()
                     item['business_info'] = re.findall('(.*?)工作地址', business_all_info)[0]
                 except Exception as err:
                     print(err)
