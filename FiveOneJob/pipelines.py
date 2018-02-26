@@ -17,30 +17,7 @@ class FiveonejobPipeline(object):
         pass
 
     def process_item(self, item, spider):
-        data = {
-            'from_website': item['from_website'],
-            'min_salary': item['min_salary'],
-            'max_salary': item['max_salary'],
-            'location': item['location'],
-            'publish_date': item['publish_date'],
-            'work_experience': item['work_experience'],
-            'limit_degree': item['limit_degree'],
-            'people_count': item['people_count'],
-            'career_type': item['career_type'],
-            'work_duty': item['work_duty'],
-            'work_need': item['work_need'],
-            'work_type': item['work_type'],
-            'work_duty_content': item['work_duty_content'],
-            'work_info_url': item['work_info_url'],
-            'business_name': item['business_name'],
-            'business_type': item['business_type'],
-            'business_count': item['business_count'],
-            'business_website': item['business_website'],
-            'business_industry': item['business_industry'],
-            'business_location': item['business_location'],
-            'business_info': item['business_info'],
-        }
-        self.FiveOneData.insert_one(data)
+        self.FiveOneData.insert_one(item)
         return item
 
     def close_spider(self, spider):

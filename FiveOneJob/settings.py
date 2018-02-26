@@ -14,20 +14,18 @@ BOT_NAME = 'FiveOneJob'
 DEFAULT_REQUEST_HEADERS = {
     'accept': 'image/webp,*/*;q=0.8',
     'accept-language': 'zh-CN,zh;q=0.8',
-    # 'referer': 'https://www.taobao.com/',
     'user-agent': 'Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36',
 }
 
 SPIDER_MODULES = ['FiveOneJob.spiders']
 NEWSPIDER_MODULE = 'FiveOneJob.spiders'
 
-MONGO_HOST = "120.79.162.44"
-MONGO_PORT = 10086
+MONGO_HOST = "localhost"
+MONGO_PORT = 27017
 MONGO_DB = "fwwb"
 MONGO_COLL = "five_one_jobData"
-MONGO_USER = "Leo"
-MONGO_PSW = "fwwb123456"
-
+MONGO_USER = ""
+MONGO_PSW = ""
 
 
 
