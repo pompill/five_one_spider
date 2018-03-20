@@ -10,6 +10,7 @@ from scrapy.spiders import Spider
 from lxml import etree
 import re
 from bs4 import BeautifulSoup as Bs
+import hashlib
 
 # 项目内部库
 from FiveOneJob.items import FiveOneJobItem
@@ -128,6 +129,8 @@ class FiveOneJobSpider(Spider):
                 work_duty_content = work_info_content
             publish_date = changeMs.change_ms(str(str(2018) + str('-') + date))
             business_website = selector.xpath('//p[@class="cname"]/a/@href')
+            string = career_type + business_name
+            item['_id'] = hashlib.md5(string.encode('utf-8')).hexdigest()
             item['from_website'] = "51job"
             item['location'] = location
             item['work_experience'] = work_experience
